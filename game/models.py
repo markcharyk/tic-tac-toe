@@ -13,6 +13,7 @@ class Board(models.Model):
         return result.trim()
 
     def check_for_end(self):
+        """Check to see if a game is won or tied"""
         conditions = (
             set([0,3,6]),
             set([1,4,6]),
@@ -37,7 +38,7 @@ class Board(models.Model):
         return False
 
     def make_move(self, space, char):
-        import pdb; pdb.set_trace()
+        """Play one square in the game"""
         if 0 <= space < 9 and self.spaces[space] == u' ':
             self.spaces = "{0}{1}{2}".format(self.spaces[:space], char, self.spaces[space+1:])
         else:
