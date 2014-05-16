@@ -1,3 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
+def play(request):
+    if request.method == 'POST':
+        if request.is_ajax():
+            pass
+    else:
+        return
