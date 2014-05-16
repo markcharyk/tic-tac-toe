@@ -2,7 +2,7 @@ from django.db import models
 
 class Board(models.Model):
     """For displaying and keeping track of the state of the game"""
-    spaces = models.CharField(max_length=9, default = '         ')
+    spaces = models.CharField(max_length=9, default = u'         ')
 
     def __repr__(self):
         result = ''
@@ -32,6 +32,8 @@ class Board(models.Model):
                 return True, 'X'
             elif run.issubset(o_spaces):
                 return True, 'O'
+        if len(x_spaces) + len(o_spaces) == 9:
+            return True, 'C'
         return False
 
     def make_move(self, space, char):
@@ -39,7 +41,7 @@ class Board(models.Model):
         if 0 <= space < 9 and self.spaces[space] == u' ':
             self.spaces = "{0}{1}{2}".format(self.spaces[:space], char, self.spaces[space+1:])
         else:
-            raise UnallowedError
+            raise UnallowedError("That's an illegal move")
 
 
 class UnallowedError(BaseException):
