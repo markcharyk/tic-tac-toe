@@ -64,3 +64,12 @@ class CheckForEndTest(TestCase):
         returned_tup = self.b.check_for_end()
         self.assertFalse(returned_tup[0])
         self.assertEqual(returned_tup[1], 'X')
+
+
+class ViewsTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_new_game(self):
+        resp = self.client.get('/game')
+        self.assertContains(resp, 'X gets the first move')
