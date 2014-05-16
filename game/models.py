@@ -10,21 +10,19 @@ class Board(models.Model):
             for space in self.spaces[x*3:(x+1)*3]:
                 result = '{0}{1}   '.format(result, space)
             result = '{}\n'.format(result)
-        return result.trim()
+        return result
 
     def check_for_end(self):
         """Check to see if a game is won or tied"""
         conditions = (
             set([0,3,6]),
-            set([1,4,6]),
+            set([1,4,7]),
             set([2,5,8]),
             set([0,1,2]),
             set([3,4,5]),
             set([6,7,8]),
             set([0,4,8]),
-            set([2,4,6]),
-        )
-
+            set([2,4,6]),)
         x_spaces = {i for i, turn in enumerate(self.spaces) if turn == 'X'}
         o_spaces = {i for i, turn in enumerate(self.spaces) if turn == 'O'}
 
@@ -33,14 +31,20 @@ class Board(models.Model):
                 return True, 'X'
             elif run.issubset(o_spaces):
                 return True, 'O'
-        if len(x_spaces) + len(o_spaces) == 9:
+        num_turns = len(x_spaces) + len(o_spaces)
+        if num_turns == 9:
             return True, 'C'
-        return False
+        elif num_turns % 2 == 1:
+            return False, 'O'
+        return False, 'X'
 
     def make_move(self, space, char):
         """Play one square in the game"""
         if 0 <= space < 9 and self.spaces[space] == u' ':
-            self.spaces = "{0}{1}{2}".format(self.spaces[:space], char, self.spaces[space+1:])
+            self.spaces = "{0}{1}{2}".format(
+                self.spaces[:space],
+                char,
+                self.spaces[space+1:])
         else:
             raise UnallowedError("That's an illegal move")
 
