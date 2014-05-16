@@ -2,15 +2,15 @@ from django.db import models
 
 class Board(models.Model):
     """For displaying and keeping track of the state of the game"""
-    spaces = models.CharField(max_length=9)
+    spaces = models.CharField(max_length=9, default = '         ')
 
     def __repr__(self):
         result = ''
         for x in range(3):
             for space in self.spaces[x*3:(x+1)*3]:
-                result = '%s%s   ' % (result, space)
-            result = '%s\n' % result
-        return result
+                result = '{0}{1}   '.format(result, space)
+            result = '{}\n'.format(result)
+        return result.trim()
 
     def check_for_end(self):
         conditions = (
@@ -33,3 +33,15 @@ class Board(models.Model):
             elif run.issubset(o_spaces):
                 return True, 'O'
         return False
+
+    def make_move(self, space, char):
+        import pdb; pdb.set_trace()
+        if 0 <= space < 9 and self.spaces[space] == u' ':
+            self.spaces = "{0}{1}{2}".format(self.spaces[:space], char, self.spaces[space+1:])
+        else:
+            raise UnallowedError
+
+
+class UnallowedError(BaseException):
+    """Exception raised when a move is not allowed"""
+    pass
