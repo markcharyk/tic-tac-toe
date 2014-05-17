@@ -12,8 +12,18 @@ function makeMove(cId) {
         },
         dataType: 'json',
         success: function(data) {
-            alert(data.msg);
             drawX(con);
+            if(data.O) {
+                canv = document.getElementById("space-"+data.O);
+                con = canv.getContext("2d");
+                drawO(con)
+            }
+            if(data.msg) {
+                alert(data.msg);
+            }
+            if(data.end) {
+                $('canvas').attr('onclick', '')
+            }
         },
         error: function(xhr, textStatus, errorThrown) {
             alert('HTTP Error: '+errorThrown+' | Error Message: '+textStatus);

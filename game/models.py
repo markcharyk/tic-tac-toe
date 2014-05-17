@@ -33,7 +33,7 @@ class Board(models.Model):
                 return True, 'O'
         num_turns = len(x_spaces) + len(o_spaces)
         if num_turns == 9:
-            return True, 'C'
+            return True, 'The cat'
         elif num_turns % 2 == 1:
             return False, 'O'
         return False, 'X'
@@ -47,6 +47,7 @@ class Board(models.Model):
                 self.spaces[space+1:])
             self.save()
         else:
+            import pdb; pdb.set_trace()
             raise UnallowedError("That's an illegal move")
 
 
