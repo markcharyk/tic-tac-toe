@@ -29,18 +29,17 @@ function makeMove(cId) {
             alert('HTTP Error: '+errorThrown+' | Error Message: '+textStatus);
         }
     });
-
-    function drawX(ctx) {
-        ctx.beginPath();
-        ctx.moveTo(15,15);
-        ctx.lineTo(60,60);
-        ctx.moveTo(60,15);
-        ctx.lineTo(15,60);
-        ctx.stroke();
-        ctx.closePath();
-    }
 }
 
+function drawX(ctx) {
+    ctx.beginPath();
+    ctx.moveTo(15,15);
+    ctx.lineTo(60,60);
+    ctx.moveTo(60,15);
+    ctx.lineTo(15,60);
+    ctx.stroke();
+    ctx.closePath();
+}
 
 function drawO(ctx) {
     ctx.beginPath();

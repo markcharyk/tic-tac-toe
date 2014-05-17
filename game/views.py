@@ -19,7 +19,7 @@ def play(request):
         except UnallowedError:
             data = {"msg": "That's not allowed!"}
         else:
-            if not board.check_for_ending()[0]:
+            if not board.check_for_end()[0]:
                 O_space = _AI_move_random(board)
                 data = {"O": O_space}
             if board.check_for_end()[0]:
