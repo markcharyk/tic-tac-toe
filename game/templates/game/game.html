@@ -5,7 +5,7 @@
 {% block content %}
     <h3>A game of Tic-Tac-Toe</h3>
     {% csrf_token %}
-    <div id='board'>
+    <div id='board-{{ board_id }}' class='game-board'>
         <canvas id='space-0' width="75" height="75" style="border:1px solid black" onclick="makeMove(0)"></canvas>
         <canvas id='space-1' width="75" height="75" style="border:1px solid black" onclick="makeMove(1)"></canvas>
         <canvas id='space-2' width="75" height="75" style="border:1px solid black" onclick="makeMove(2)"></canvas><br>

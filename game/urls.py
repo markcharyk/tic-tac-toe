@@ -5,8 +5,4 @@ urlpatterns = patterns(
     url(
         r'^play/$',
         'play',
-        name='play'),
-    url(
-        r'^play/move/$',
-        'move',
-        name='move'),)
+        name='play'),)

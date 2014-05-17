@@ -1,23 +1,24 @@
 function makeMove(cId) {
+    var canv = document.getElementById("space-"+cId);
+    var con = canv.getContext("2d");
+
     $.ajax({
         type: 'POST',
         url: '/play/',
         data: {
             csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
             id: cId,
+            board_id: $('.game-board').attr('id')
         },
         dataType: 'json',
         success: function(data) {
             alert(data.msg);
             drawX(con);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function(xhr, textStatus, errorThrown) {
             alert('HTTP Error: '+errorThrown+' | Error Message: '+textStatus);
         }
     });
-
-    var canv = document.getElementById("space-"+cId);
-    var con = canv.getContext("2d");
 
     function drawX(ctx) {
         ctx.beginPath();

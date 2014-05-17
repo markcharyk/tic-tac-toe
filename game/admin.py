@@ -1,3 +1,7 @@
 from django.contrib import admin
+from game.models import Board
 
-# Register your models here.
+class BoardAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Board, BoardAdmin)
