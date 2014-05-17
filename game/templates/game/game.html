@@ -1,3 +1,17 @@
 {% extends 'game/base.html' %}
 
 {% block title %}Play the game{% endblock %}
+{% block script %}<script src="game/game.js"></script>{% endblock %}
+
+{% block body %}
+    <h3>A game of Tic-Tac-Toe</h3>
+    <canvas id='space-0' width="75" height="75" style="border:1px solid black" onclick="makeMove(0)"></canvas>
+    <canvas id='space-1' width="75" height="75" style="border:1px solid black" onclick="makeMove(1)"></canvas>
+    <canvas id='space-2' width="75" height="75" style="border:1px solid black" onclick="makeMove(2)"></canvas><br>
+    <canvas id='space-3' width="75" height="75" style="border:1px solid black" onclick="makeMove(3)"></canvas>
+    <canvas id='space-4' width="75" height="75" style="border:1px solid black" onclick="makeMove(4)"></canvas>
+    <canvas id='space-5' width="75" height="75" style="border:1px solid black" onclick="makeMove(5)"></canvas><br>
+    <canvas id='space-6' width="75" height="75" style="border:1px solid black" onclick="makeMove(6)"></canvas>
+    <canvas id='space-7' width="75" height="75" style="border:1px solid black" onclick="makeMove(7)"></canvas>
+    <canvas id='space-8' width="75" height="75" style="border:1px solid black" onclick="makeMove(8)"></canvas>
+{% endblock %}
