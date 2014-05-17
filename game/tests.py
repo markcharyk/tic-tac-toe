@@ -1,5 +1,6 @@
 from django.test import TestCase
 from game.models import Board, UnallowedError
+from django.test import Client
 
 
 class MakeMoveTest(TestCase):
@@ -71,5 +72,5 @@ class ViewsTest(TestCase):
         self.client = Client()
 
     def test_new_game(self):
-        resp = self.client.get('/game')
+        resp = self.client.get('/play')
         self.assertContains(resp, 'X gets the first move')

@@ -45,6 +45,7 @@ class Board(models.Model):
                 self.spaces[:space],
                 char,
                 self.spaces[space+1:])
+            self.save()
         else:
             raise UnallowedError("That's an illegal move")
 
