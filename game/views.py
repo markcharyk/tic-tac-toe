@@ -19,11 +19,13 @@ def play(request):
         except UnallowedError:
             data = {"msg": "That's not allowed!"}
         else:
+            data = {}
             if not board.check_for_end()[0]:
                 O_space = _AI_move_random(board)
                 data = {"O": O_space}
-            if board.check_for_end()[0]:
-                data = {"msg": ending[1]+' wins!', "end": "true"}
+            ending = board.check_for_end()
+            if ending[0]:
+                data.update({"msg": ending[1]+' wins!', "end": "true"})
         return HttpResponse(
             json.dumps(data),
             content_type="application/json")
