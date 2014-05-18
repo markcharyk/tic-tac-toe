@@ -44,7 +44,6 @@ class Board(models.Model):
                 char,
                 self.spaces[space+1:])
         else:
-            import pdb; pdb.set_trace()
             raise UnallowedError("That's an illegal move")
 
 
