@@ -1,6 +1,8 @@
 from django.test import TestCase
 from game.models import Board, UnallowedError
+from game.views import _AI_move_random
 from django.test import Client
+import json
 
 
 class MakeMoveTest(TestCase):
@@ -46,7 +48,7 @@ class CheckForEndTest(TestCase):
         self.b.spaces = u'OXOOXXXOX'
         returned_tup = self.b.check_for_end()
         self.assertTrue(returned_tup[0])
-        self.assertEqual(returned_tup[1], 'C')
+        self.assertEqual(returned_tup[1], 'The cat')
 
     def test_Xs_turn(self):
         self.b.spaces = u'XX  O O  '
@@ -69,5 +71,25 @@ class ViewsTest(TestCase):
         self.client = Client()
 
     def test_new_game(self):
-        resp = self.client.get('/play')
-        self.assertContains(resp, 'X gets the first move')
+        resp = self.client.get('/play/')
+        self.assertEquals(resp.status_code, 200)
+        self.assertContains(resp, "<div id='board-")
+        self.assertContains(resp, 'onclick="makeMove(')
+
+    def test_AI_move_full(self):
+        """Tests the AI trying to move on a full board"""
+        b = Board()
+        b.spaces = 'XXOOOXXOX'
+        self.assertIsNone(_AI_move_random(b))
+
+    def test_AI_move_empty(self):
+        """Tests the AI placing a move on an empty board"""
+        b = Board()
+        b.spaces = '         '
+        self.assertIn(_AI_move_random(b), range(9))
+
+    def test_AI_move_middle_of_game(self):
+        """Tests the AI placing a move on a partially-filled board"""
+        b = Board()
+        b.spaces = 'XXO X  O '
+        self.assertIn(_AI_move_random(b), [3, 5, 6, 8])
