@@ -34,9 +34,7 @@ class Board(models.Model):
         num_turns = len(x_spaces) + len(o_spaces)
         if num_turns == 9:
             return True, 'The cat'
-        elif num_turns % 2 == 1:
-            return False, 'O'
-        return False, 'X'
+        return (False,)
 
     def make_move(self, space, char):
         """Play one square in the game"""
@@ -45,7 +43,6 @@ class Board(models.Model):
                 self.spaces[:space],
                 char,
                 self.spaces[space+1:])
-            self.save()
         else:
             import pdb; pdb.set_trace()
             raise UnallowedError("That's an illegal move")

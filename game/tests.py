@@ -52,19 +52,16 @@ class CheckForEndTest(TestCase):
         self.b.spaces = u'XX  O O  '
         returned_tup = self.b.check_for_end()
         self.assertFalse(returned_tup[0])
-        self.assertEqual(returned_tup[1], 'X')
 
     def test_Os_turn(self):
         self.b.spaces = u'XX    O  '
         returned_tup = self.b.check_for_end()
         self.assertFalse(returned_tup[0])
-        self.assertEqual(returned_tup[1], 'O')
 
     def test_start_of_game(self):
         self.b.spaces = u'         '
         returned_tup = self.b.check_for_end()
         self.assertFalse(returned_tup[0])
-        self.assertEqual(returned_tup[1], 'X')
 
 
 class ViewsTest(TestCase):

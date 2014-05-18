@@ -16,7 +16,7 @@ function makeMove(cId) {
             if(data.O) {
                 canv = document.getElementById("space-"+data.O);
                 con = canv.getContext("2d");
-                drawO(con)
+                drawO(con);
             }
             if(data.msg) {
                 alert(data.msg);

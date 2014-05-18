@@ -24,8 +24,12 @@ def play(request):
                 O_space = _AI_move_random(board)
                 data = {"O": O_space}
             ending = board.check_for_end()
+            board.save()
             if ending[0]:
-                data.update({"msg": ending[1]+' wins!', "end": "true"})
+                data.update({
+                    "msg": ending[1]+' wins!\nRefresh to play again.', 
+                    "end": "true"})
+                board.delete()
         return HttpResponse(
             json.dumps(data),
             content_type="application/json")
