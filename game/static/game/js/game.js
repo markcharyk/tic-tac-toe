@@ -1,5 +1,6 @@
 function makeMove(cId) {
-    var canv = document.getElementById("space-"+cId);
+    var space = "space-" + cId;
+    var canv = document.getElementById(space);
     var con = canv.getContext("2d");
 
     $.ajax({
@@ -13,16 +14,19 @@ function makeMove(cId) {
         dataType: 'json',
         success: function(data) {
             drawX(con);
+            $('#'+space).attr('onclick', '');
             if(data.O) {
-                canv = document.getElementById("space-"+data.O);
+                space = "space-" + data.O;
+                canv = document.getElementById(space);
                 con = canv.getContext("2d");
                 drawO(con);
+                $('#'+space).attr('onclick', '');
             }
             if(data.msg) {
                 alert(data.msg);
             }
             if(data.end) {
-                $('canvas').attr('onclick', '')
+                $('canvas').attr('onclick', '');
             }
         },
         error: function(xhr, textStatus, errorThrown) {

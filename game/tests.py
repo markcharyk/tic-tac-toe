@@ -1,8 +1,12 @@
 from django.test import TestCase
 from game.models import Board, UnallowedError
 from game.views import _AI_move_random
-from django.test import Client
+from django.test import Client, LiveServerTestCase
+from selenium import webdriver
+from django.core.urlresolvers import reverse
 import json
+import os
+from time import sleep
 
 
 class MakeMoveTest(TestCase):
@@ -93,3 +97,27 @@ class ViewsTest(TestCase):
         b = Board()
         b.spaces = 'XXO X  O '
         self.assertIn(_AI_move_random(b), [3, 5, 6, 8])
+
+
+class BrowserTest(LiveServerTestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.selenium = webdriver.Chrome()
+        super(BrowserTest, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super(BrowserTest, cls).tearDownClass()
+
+    def test_X_move(self):
+        """Test that a move unsets the given canvas's onclick attr"""
+        self.selenium.get('{0}{1}'.format(self.live_server_url, reverse('play')))
+        sleep(1)
+        canv = self.selenium.find_element_by_id('space-0')
+        canv.click()
+        sleep(2)
+        self.assertEqual(canv.get_attribute('onclick'), '')
+
+        # alert = self.selenium.switch_to.alert
+        # self.assertIn("That's not allowed!", alert.text)
