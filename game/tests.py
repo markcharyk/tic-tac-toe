@@ -113,11 +113,90 @@ class BrowserTest(LiveServerTestCase):
     def test_X_move(self):
         """Test that a move unsets the given canvas's onclick attr"""
         self.selenium.get('{0}{1}'.format(self.live_server_url, reverse('play')))
-        sleep(1)
         canv = self.selenium.find_element_by_id('space-0')
         canv.click()
         sleep(2)
         self.assertEqual(canv.get_attribute('onclick'), '')
 
-        # alert = self.selenium.switch_to.alert
-        # self.assertIn("That's not allowed!", alert.text)
+    def test_end_game(self):
+        """Test that the final play unsets all canvases' onclick attrs"""
+        self.selenium.get('{0}{1}'.format(self.live_server_url, reverse('play')))
+        b = self.selenium.find_element_by_class_name('game-board')
+        board = Board.objects.get(pk=int(b.get_attribute('id')[6:]))
+        board.spaces = 'OXOOXXXO '
+        board.save()
+        canv = self.selenium.find_element_by_id('space-8')
+        canv.click()
+        sleep(2)
+        alert = self.selenium.switch_to.alert
+        alert.accept()
+        for i in range(9):
+            self.assertEqual(self.selenium.find_element_by_id('space-'+str(i)).get_attribute('onclick'), '')
+
+    def test_move_ajax(self):
+        """Test that the clicked move and comptuer move are posted to the board in the database"""
+        self.selenium.get('{0}{1}'.format(self.live_server_url, reverse('play')))
+        canv = self.selenium.find_element_by_id('space-0')
+        canv.click()
+        sleep(1)
+        b = self.selenium.find_element_by_class_name('game-board')
+        board = Board.objects.get(pk=int(b.get_attribute('id')[6:]))
+        self.assertEqual('X', board.spaces[0])
+        self.assertIn('O', board.spaces)
+
+    def test_X_wins(self):
+        """Test for X winning condition
+        Note, the moves won't be shown on the test browser"""
+        self.selenium.get('{0}{1}'.format(self.live_server_url, reverse('play')))
+        b = self.selenium.find_element_by_class_name('game-board')
+        board = Board.objects.get(pk=int(b.get_attribute('id')[6:]))
+        board.spaces = 'X O XO   '
+        board.save()
+        canv = self.selenium.find_element_by_id('space-8')
+        canv.click()
+        sleep(1)
+        alert = self.selenium.switch_to.alert
+        self.assertIn("X wins!", alert.text)
+        alert.accept()
+
+    def test_O_wins(self):
+        """Test for O winning condition
+        Note that the moves won't be shown on the test browser"""
+        self.selenium.get('{0}{1}'.format(self.live_server_url, reverse('play')))
+        b = self.selenium.find_element_by_class_name('game-board')
+        board = Board.objects.get(pk=int(b.get_attribute('id')[6:]))
+        # Set up the board so no matter what move O makes it is a win
+        board.spaces = 'O OOXX X '
+        board.save()
+        canv = self.selenium.find_element_by_id('space-8')
+        canv.click()
+        sleep(1)
+        alert = self.selenium.switch_to.alert
+        self.assertIn("O wins!", alert.text)
+        alert.accept()
+
+    def test_cats_game(self):
+        """Test for tie game condition
+        Note that the moves won't be shown on the test browser"""
+        self.selenium.get('{0}{1}'.format(self.live_server_url, reverse('play')))
+        b = self.selenium.find_element_by_class_name('game-board')
+        board = Board.objects.get(pk=int(b.get_attribute('id')[6:]))
+        board.spaces = 'OXOOXXXO '
+        board.save()
+        canv = self.selenium.find_element_by_id('space-8')
+        canv.click()
+        sleep(1)
+        alert = self.selenium.switch_to.alert
+        self.assertIn("The cat wins!", alert.text)
+        alert.accept()
+
+    def test_re_click(self):
+        """Test that a click on an occupied space has no effect"""
+        self.selenium.get('{0}{1}'.format(self.live_server_url, reverse('play')))
+        canv = self.selenium.find_element_by_id('space-0')
+        canv.click()
+        sleep(2)
+        tx = canv.text
+        canv.click()
+        sleep(2)
+        self.assertEqual(tx, canv.text)
