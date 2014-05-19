@@ -20,20 +20,24 @@ def play(request):
             data = {"msg": "That's not allowed!"}
         else:
             data = {}
+            # Check if X's move ended the game
             if not board.check_for_end()[0]:
                 O_space = _AI_move_random(board)
                 data = {"O": O_space}
             ending = board.check_for_end()
             board.save()
+            # Check if O's move ended the game
             if ending[0]:
                 data.update({
                     "msg": ending[1]+' wins!\nRefresh to play again.', 
                     "end": "true"})
                 board.delete()
+        # return a response with the appropriate JSON data
         return HttpResponse(
             json.dumps(data),
             content_type="application/json")
     elif request.method == 'GET':
+        # Create a new board and put it in the database
         new_board = Board()
         new_board.save()
         return render(request, 'game/game.html', {'board_id': new_board.pk})
