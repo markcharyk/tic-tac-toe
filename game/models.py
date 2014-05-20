@@ -1,4 +1,14 @@
 from django.db import models
+conditions = (
+    (0,3,6),
+    (1,4,7),
+    (2,5,8),
+    (0,1,2),
+    (3,4,5),
+    (6,7,8),
+    (0,4,8),
+    (2,4,6),)
+
 
 class Board(models.Model):
     """For displaying and keeping track of the state of the game"""
@@ -14,25 +24,12 @@ class Board(models.Model):
 
     def check_for_end(self):
         """Check to see if a game is won or tied"""
-        conditions = (
-            set([0,3,6]),
-            set([1,4,7]),
-            set([2,5,8]),
-            set([0,1,2]),
-            set([3,4,5]),
-            set([6,7,8]),
-            set([0,4,8]),
-            set([2,4,6]),)
-        x_spaces = {i for i, turn in enumerate(self.spaces) if turn == 'X'}
-        o_spaces = {i for i, turn in enumerate(self.spaces) if turn == 'O'}
-
         for run in conditions:
-            if run.issubset(x_spaces):
-                return True, 'X'
-            elif run.issubset(o_spaces):
-                return True, 'O'
-        num_turns = len(x_spaces) + len(o_spaces)
-        if num_turns == 9:
+            if self.spaces[run[0]] == ' ':
+                continue
+            if self.spaces[run[0]] == self.spaces[run[1]] and self.spaces[run[1]] == self.spaces[run[2]]:
+                return True, self.spaces[run[0]]
+        if ' ' not in self.spaces:
             return True, 'The cat'
         return (False,)
 

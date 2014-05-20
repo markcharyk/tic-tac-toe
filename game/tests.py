@@ -75,25 +75,26 @@ class ViewsTest(TestCase):
         self.client = Client()
 
     def test_new_game(self):
+        """Test that a new game being loaded loads the board correctly"""
         resp = self.client.get('/play/')
         self.assertEquals(resp.status_code, 200)
         self.assertContains(resp, "<div id='board-")
         self.assertContains(resp, 'onclick="makeMove(')
 
     def test_AI_move_full(self):
-        """Tests the AI trying to move on a full board"""
+        """Test the AI trying to move on a full board"""
         b = Board()
         b.spaces = 'XXOOOXXOX'
         self.assertIsNone(_AI_move_random(b))
 
     def test_AI_move_empty(self):
-        """Tests the AI placing a move on an empty board"""
+        """Test the AI placing a move on an empty board"""
         b = Board()
         b.spaces = '         '
         self.assertIn(_AI_move_random(b), range(9))
 
     def test_AI_move_middle_of_game(self):
-        """Tests the AI placing a move on a partially-filled board"""
+        """Test the AI placing a move on a partially-filled board"""
         b = Board()
         b.spaces = 'XXO X  O '
         self.assertIn(_AI_move_random(b), [3, 5, 6, 8])
